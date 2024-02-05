@@ -25,7 +25,7 @@ RUN cmake --build . --config Release --target brotlienc
 WORKDIR /home/quictls
 COPY vendors/openssl .
 
-# Build Nginx from source
+# Build Nginx from source (flags from brotli install instructions)
 WORKDIR /home/nginx-$NGINX_VERSION
 RUN export CFLAGS="-m64 -march=native -mtune=native -Ofast -flto -funroll-loops -ffunction-sections -fdata-sections -Wl,--gc-sections"
 RUN export LDFLAGS="-m64 -Wl,-s -Wl,-Bsymbolic -Wl,--gc-sections"
@@ -40,8 +40,7 @@ RUN ./configure \
     --with-http_v3_module \
 	--with-cc-opt="-I../quictls/build/include" \
     --with-ld-opt="-L../quictls/build/lib"
-RUN make
-RUN make install
+RUN make && make install
 
 # Logs
 WORKDIR /var/log/nginx
@@ -51,8 +50,6 @@ RUN touch /var/log/nginx/error.log
 WORKDIR /etc/nginx
 COPY services/nginx/nginx.conf nginx.conf
 COPY services/nginx/conf.d conf.d
-
-CMD ["nginx", "-g", "daemon off;"]
 
 
 
@@ -70,13 +67,14 @@ RUN yarn build
 RUN gzip -9k dist/*.* dist/assets/*.*
 
 
+
 # ======
 # Only include necessary files
 # ======
 FROM alpine AS production
 
 RUN apk update
-RUN apk add openssl brotli
+RUN apk add openssl brotli pcre
 
 # Static files
 WORKDIR /etc/nginx/data
@@ -89,7 +87,17 @@ WORKDIR /etc/nginx
 COPY --from=build-nginx /etc/nginx .
 COPY --from=build-nginx /usr/sbin/nginx /usr/sbin/nginx
 COPY --from=build-nginx /var/log/nginx /var/log/nginx
-RUN apk add pcre
+
+# Startup
+WORKDIR /
+CMD ["nginx", "-g", "daemon off;"]
+
+
+
+# ======
+# Development build with localhost certificates
+# ======
+FROM production AS development
 
 # SSL certificates
 # TODO: Only for development build
@@ -98,7 +106,3 @@ RUN openssl req -x509 -out localhost.com.crt -keyout localhost.com.key \
 			-newkey rsa:2048 -nodes -sha256 \
 			-subj '/CN=localhost' -extensions EXT -config <( \
 			printf "[dn]\nCN=localhost\n[req]\ndistinguished_name = dn\n[EXT]\nsubjectAltName=DNS:localhost\nkeyUsage=digitalSignature\nextendedKeyUsage=serverAuth")
-
-# Startup
-WORKDIR /
-CMD ["nginx", "-g", "daemon off;"]
