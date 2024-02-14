@@ -45,6 +45,7 @@ RUN make && make install
 # Logs
 WORKDIR /var/log/nginx
 RUN touch /var/log/nginx/error.log
+RUN touch /var/log/nginx/access.log
 
 # Config
 WORKDIR /etc/nginx
@@ -87,6 +88,10 @@ WORKDIR /etc/nginx
 COPY --from=build-nginx /etc/nginx .
 COPY --from=build-nginx /usr/sbin/nginx /usr/sbin/nginx
 COPY --from=build-nginx /var/log/nginx /var/log/nginx
+
+# RUN ln -sf /dev/stdout /etc/nginx/logs/access.log
+RUN ln -sf /dev/stdout /var/log/nginx/access.log 
+RUN ln -sf /dev/stderr /var/log/nginx/error.log 
 
 # Startup
 WORKDIR /
