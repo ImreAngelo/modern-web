@@ -1,0 +1,19 @@
+{
+  "name": "server-renderer",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "nodemon src"
+  },
+  "devDependencies": {
+    "esbuild": "^0.20.0",
+    "nodemon": "^3.0.3"
+  },
+  "dependencies": {
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  }
+}
