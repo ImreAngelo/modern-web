@@ -3,5 +3,12 @@
   "version": "1.0.0",
   "main": "index.js",
   "author": "Imre Angelo <imre@angelo.no>",
-  "license": "MIT"
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+	"ssl": ""
+  },
+  "workspaces":[
+	"services/*"
+  ]
 }
