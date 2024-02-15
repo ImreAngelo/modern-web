@@ -7,6 +7,7 @@ A mono-repo template for modern web projects.
 - Microservices implemented with Docker
 - Preconfigured Nginx reverse proxy
 - Auto-generate and trust local SSL certificates for development
+- Service worker with caching and push notifications
 
 ## Usage
 - Clone repo

@@ -1,11 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-	output: 'export',
 	distDir: 'build',
+	// output: 'export',
 	// assetPrefix: "/app",
-	publicRuntimeConfig: {
-		basePath: "/app",
-	},
+	// publicRuntimeConfig: {
+	// 	basePath: "/app",
+	// },
 	// basePath: "/test",
 	// assetPrefix: "/tmp"
 };
