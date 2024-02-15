@@ -69,6 +69,9 @@ COPY services/nginx/conf.d conf.d
 FROM node:lts AS build-app
 ARG PUBLIC_PATH=static
 
+RUN apt-get update
+RUN apt-get install -y webp brotli
+
 # Build app
 WORKDIR /usr/app
 ADD services/app .
@@ -80,10 +83,16 @@ WORKDIR /usr/app/build
 RUN mv _next/static ${PUBLIC_PATH}
 RUN rm -r _next
 RUN sed -i "s/_next\/static/$PUBLIC_PATH/g" *.* ${PUBLIC_PATH}/**/*.*
-RUN gzip -9k -r ./ 
 
-# RUN apt-get install brotli
-# Do brotli compression here
+# Compress files
+RUN gzip -9k -r ./
+RUN brotli -k -Z *.* ${PUBLIC_PATH}/chunks/*.js ${PUBLIC_PATH}/chunks/pages/*.js ${PUBLIC_PATH}/css/*.css 
+RUN rm *.gz.br
+# TODO: Compress all files in subdirectories automatically
+# RUN for d in ./*/ ; do (cd ./$d && brotli -k -Z *.* && rm *.gz.br) ; done
+
+# WORKDIR /usr/app/build/${PUBLIC_PATH}/media
+# RUN for f in *.* ; do (cwebp -q 80 $f -o $f.webp) ; done
 
 
 
@@ -91,18 +100,13 @@ RUN gzip -9k -r ./
 # Only include necessary files
 # ======
 FROM alpine AS production
-ARG PUBLIC_PATH=static
 
 RUN apk update
-RUN apk add brotli pcre
+RUN apk add pcre
 
 # # Static files
 WORKDIR /etc/nginx/data
 COPY --from=build-app /usr/app/build .
-RUN brotli -k -Z *.* ${PUBLIC_PATH}/chunks/*.js ${PUBLIC_PATH}/chunks/pages/*.js ${PUBLIC_PATH}/css/*.css ${PUBLIC_PATH}/media/*.woff*
-RUN rm *.gz.br
-# TODO: Compress all files in subdirectories automatically
-# RUN for d in ./*/ ; do (cd ./$d && brotli -k -Z *.* && rm *.gz.br) ; done
 
 # Nginx
 WORKDIR /etc/nginx
