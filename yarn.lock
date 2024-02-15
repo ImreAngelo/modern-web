@@ -1809,6 +1809,11 @@ jake@^10.8.5:
     filelist "^1.0.4"
     minimatch "^3.1.2"
 
+jest-teamcity@^1.11.0:
+  version "1.11.0"
+  resolved "https://registry.yarnpkg.com/jest-teamcity/-/jest-teamcity-1.11.0.tgz#f3135674f69b36f3eca0ccae7a4907fdd96c66c4"
+  integrity sha512-QCcvE6N9a4/JeM0v0Nty/fFMYSXxX+Xuxa5cyugEYdTqLo2lI+YLX6wq6L/iAPFEgUb0cRVl1PIm+4cZDn/SHA==
+
 "js-tokens@^3.0.0 || ^4.0.0":
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/js-tokens/-/js-tokens-4.0.0.tgz#19203fb59991df98e3a287050d4647cdeaf32499"
@@ -2567,6 +2572,7 @@ streamsearch@^1.1.0:
   integrity sha512-Mcc5wHehp9aXz1ax6bZUyY5afg9u2rv5cqQI3mRrYkGC8rW2hM02jWuwjtL++LS5qinSyhj2QfLyNsuc+VsExg==
 
 "string-width-cjs@npm:string-width@^4.2.0", string-width@^4.1.0:
+  name string-width-cjs
   version "4.2.3"
   resolved "https://registry.yarnpkg.com/string-width/-/string-width-4.2.3.tgz#269c7117d27b05ad2e536830a8ec895ef9c6d010"
   integrity sha512-wKyQRQpjJ0sIp62ErSZdGsjMJWsap5oRNihHhu6G7JVO/9jIB6UyevL+tXuOqrng8j/cxKTWyWUwvSTriiZz/g==

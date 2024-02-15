@@ -97,16 +97,11 @@ RUN apk update
 RUN apk add brotli pcre
 
 # # Static files
-# WORKDIR /etc/nginx/data
-# COPY --from=build-app /usr/app/dist .
-# RUN brotli -k -Z *.* assets/*.*
-# RUN rm *.gz.br
-
-# Add app and compress files
 WORKDIR /etc/nginx/data
 COPY --from=build-app /usr/app/build .
 RUN brotli -k -Z *.* ${PUBLIC_PATH}/chunks/*.js ${PUBLIC_PATH}/chunks/pages/*.js ${PUBLIC_PATH}/css/*.css ${PUBLIC_PATH}/media/*.woff*
 RUN rm *.gz.br
+# TODO: Compress all files in subdirectories automatically
 # RUN for d in ./*/ ; do (cd ./$d && brotli -k -Z *.* && rm *.gz.br) ; done
 
 # Nginx
@@ -131,12 +126,10 @@ CMD ["nginx", "-g", "daemon off;"]
 FROM production AS development
 
 # SSL certificates
-# TODO: Only for development build
-WORKDIR /etc/nginx/certs
-RUN apk add openssl
-RUN openssl req -x509 -out localhost.com.crt -keyout localhost.com.key \
-			-newkey rsa:2048 -nodes -sha256 \
-			-subj '/CN=localhost' -extensions EXT -config <( \
-			printf "[dn]\nCN=localhost\n[req]\ndistinguished_name = dn\n[EXT]\nsubjectAltName=DNS:localhost\nkeyUsage=digitalSignature\nextendedKeyUsage=serverAuth")
-
 WORKDIR /etc/nginx
+ADD services/nginx/ssl ./certs
+# RUN apk add openssl
+# RUN openssl req -x509 -out ./certs/localhost.com.crt -keyout ./certs/localhost.com.key \
+# 			-newkey rsa:2048 -nodes -sha256 \
+# 			-subj '/CN=localhost' -extensions EXT -config <( \
+# 			printf "[dn]\nCN=localhost\n[req]\ndistinguished_name = dn\n[EXT]\nsubjectAltName=DNS:localhost\nkeyUsage=digitalSignature\nextendedKeyUsage=serverAuth")

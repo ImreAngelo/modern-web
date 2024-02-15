@@ -8,6 +8,11 @@ A mono-repo template for modern web projects.
 - Preconfigured Nginx reverse proxy
 - Auto-generate and trust local SSL certificates for development
 
+## Usage
+- Clone repo
+- Run `yarn install`
+- Run `yarn ssl`
+
 ## Build Pipeline
 Nginx is built from source in Docker. The user has the option to set `GET_DEPENDENCIES` to `copy` or `clone` (default).
 The configured web app (`services/app`) is built in Docker and served as a static site by nginx.

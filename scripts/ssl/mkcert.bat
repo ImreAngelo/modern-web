@@ -26,6 +26,6 @@ if exist "scripts\ssl\mkcert.exe" (
 
 :: Trust and use mkcert
 scripts\\ssl\\mkcert.exe -install
-scripts\\ssl\\mkcert.exe -cert-file ./packages/nginx/ssl/ssl.crt -key-file ./packages/nginx/ssl/ssl.key localhost 127.0.0.1 deltahouse.no !ip_list!
+scripts\\ssl\\mkcert.exe -cert-file ./services/nginx/ssl/localhost.com.crt -key-file ./services/nginx/ssl/localhost.com.key localhost 127.0.0.1 example.com !ip_list!
 
 endlocal

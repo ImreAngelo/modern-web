@@ -1,15 +1,23 @@
 {
-  "name": "modern-web",
-  "version": "1.0.0",
-  "main": "index.js",
-  "author": "Imre Angelo <imre@angelo.no>",
-  "license": "MIT",
-  "private": true,
-  "scripts": {
-	"ssl": "",
-	"git:update": "git submodule update --init --recursive"
-  },
-  "workspaces":[
-	"services/*"
-  ]
+ "name": "modern-web",
+ "version": "1.0.0",
+ "main": "index.js",
+ "author": "Imre Angelo <imre@angelo.no>",
+ "license": "MIT",
+ "private": true,
+ "scripts": {
+  "ssl": "py ./scripts/init.py",
+  "git:update": "git submodule update --init --recursive",
+  "docker:up": "docker compose -f \"docker-compose.yml\" up -d --build",
+  "start": "yarn workspaces foreach -pvi run start",
+  "build": "yarn workspaces foreach -pvi run build",
+  "test": "yarn workspaces foreach -pvi run test"
+ },
+ "workspaces": [
+  "services/*"
+ ],
+ "devDependencies": {
+  "jest-teamcity": "^1.11.0"
+ },
+ "resolutions": {}
 }
