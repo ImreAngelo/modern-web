@@ -1,12 +1,28 @@
+# Set GET_DEPENDENCIES to 'copy' or 'clone' to copy git repos 
+# from /vendors or clone from repository, respectively
+ARG GET_DEPENDENCIES=clone
+
+# Clone dependencies from original repositories
+# Allows cloning repo without submodules and installing only in Docker
+FROM alpine AS clone-dependencies
+WORKDIR /home
+RUN apk update
+RUN apk add git
+RUN git clone --recurse-submodules -j8 https://github.com/google/ngx_brotli
+RUN git clone https://github.com/quictls/openssl
+
+# Copy dependencies from vendors folder (does not work yet)
+FROM alpine AS copy-dependencies
+COPY ./vendors /home
+
 # ======
 # Build Nginx from source
 # ======
-FROM alpine AS build-nginx
+FROM ${GET_DEPENDENCIES}-dependencies AS build-nginx
 ARG NGINX_VERSION=1.25.1
 
-RUN apk update
-RUN apk --update add git make g++ zlib-dev linux-headers pcre-dev openssl-dev \
-						cmake 
+# Get required packages
+RUN apk --update add make cmake g++ zlib-dev linux-headers pcre-dev openssl-dev
 
 # Get Nginx source code
 WORKDIR /home
@@ -14,16 +30,9 @@ RUN wget https://nginx.org/download/nginx-$NGINX_VERSION.tar.gz
 RUN tar xvf nginx-$NGINX_VERSION.tar.gz
 
 # Enable brotli compression
-WORKDIR /home
-RUN git clone --recurse-submodules -j8 https://github.com/google/ngx_brotli
 WORKDIR /home/ngx_brotli/deps/brotli/out
 RUN cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DCMAKE_C_FLAGS="-Ofast -m64 -march=native -mtune=native -flto -funroll-loops -ffunction-sections -fdata-sections -Wl,--gc-sections" -DCMAKE_CXX_FLAGS="-Ofast -m64 -march=native -mtune=native -flto -funroll-loops -ffunction-sections -fdata-sections -Wl,--gc-sections" -DCMAKE_INSTALL_PREFIX=./installed ..
 RUN cmake --build . --config Release --target brotlienc
-
-# Use SSL with QUIC support
-# RUN git clone https://github.com/quictls/openssl
-WORKDIR /home/quictls
-COPY vendors/openssl .
 
 # Build Nginx from source (flags from brotli install instructions)
 WORKDIR /home/nginx-$NGINX_VERSION
@@ -38,8 +47,8 @@ RUN ./configure \
 	--with-http_gzip_static_module \
 	--with-http_v2_module \
     --with-http_v3_module \
-	--with-cc-opt="-I../quictls/build/include" \
-    --with-ld-opt="-L../quictls/build/lib"
+	--with-cc-opt="-I../openssl/build/include" \
+    --with-ld-opt="-L../openssl/build/lib"
 RUN make && make install
 
 # Logs
@@ -130,4 +139,4 @@ RUN openssl req -x509 -out localhost.com.crt -keyout localhost.com.key \
 			-subj '/CN=localhost' -extensions EXT -config <( \
 			printf "[dn]\nCN=localhost\n[req]\ndistinguished_name = dn\n[EXT]\nsubjectAltName=DNS:localhost\nkeyUsage=digitalSignature\nextendedKeyUsage=serverAuth")
 
-WORKDIR /~
+WORKDIR /etc/nginx

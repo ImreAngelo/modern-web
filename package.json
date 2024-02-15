@@ -6,7 +6,8 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-	"ssl": ""
+	"ssl": "",
+	"git:update": "git submodule update --init --recursive"
   },
   "workspaces":[
 	"services/*"
