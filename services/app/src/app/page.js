@@ -6,25 +6,25 @@ import { useEffect } from "react";
 
 export default function Home() {
 	useEffect(() => {
-		if (!('serviceWorker' in navigator)) {
-			// Service Worker isn't supported on this browser.
-			return;
-		}
+		// if (!('serviceWorker' in navigator)) {
+		// 	// Service Worker isn't supported on this browser.
+		// 	return;
+		// }
 
-		navigator.serviceWorker
-			.register("/sw.js")
-			.then((registration) => {
-				console.log(
-					"Service Worker registration successful with scope: ",
-					registration.scope
-				)
+		// navigator.serviceWorker
+		// 	.register("/sw.js")
+		// 	.then((registration) => {
+		// 		console.log(
+		// 			"Service Worker registration successful with scope: ",
+		// 			registration.scope
+		// 		)
 
-				Notification.requestPermission()
-					.then(r => {
-						console.log("Permissions: ", r)
-					})
-			})
-			.catch((err) => console.error("Service Worker registration failed: ", err));
+		// 		Notification.requestPermission()
+		// 			.then(r => {
+		// 				console.log("Permissions: ", r)
+		// 			})
+		// 	})
+		// 	.catch((err) => console.error("Service Worker registration failed: ", err));
 	}, [])
 
 

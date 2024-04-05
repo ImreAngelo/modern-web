@@ -15,6 +15,8 @@ RUN git clone https://github.com/quictls/openssl
 FROM alpine AS copy-dependencies
 COPY ./vendors /home
 
+
+
 # ======
 # Build Nginx from source
 # ======
@@ -58,41 +60,8 @@ RUN touch /var/log/nginx/access.log
 
 # Config
 WORKDIR /etc/nginx
-COPY services/nginx/nginx.conf nginx.conf
-COPY services/nginx/conf.d conf.d
-
-
-
-# ======
-# Build web app
-# ======
-FROM node:lts AS build-app
-ARG PUBLIC_PATH=static
-
-RUN apt-get update
-RUN apt-get install -y webp brotli
-
-# Build app
-WORKDIR /usr/app
-ADD services/app .
-RUN yarn install
-RUN yarn build
-
-# Remove '_next/static' from requests
-WORKDIR /usr/app/build
-RUN mv _next/static ${PUBLIC_PATH}
-RUN rm -r _next
-RUN sed -i "s/_next\/static/$PUBLIC_PATH/g" *.* ${PUBLIC_PATH}/**/*.*
-
-# Compress files
-RUN gzip -9k -r ./
-RUN brotli -k -Z *.* ${PUBLIC_PATH}/chunks/*.js ${PUBLIC_PATH}/chunks/pages/*.js ${PUBLIC_PATH}/css/*.css 
-RUN rm *.gz.br
-# TODO: Compress all files in subdirectories automatically
-# RUN for d in ./*/ ; do (cd ./$d && brotli -k -Z *.* && rm *.gz.br) ; done
-
-# WORKDIR /usr/app/build/${PUBLIC_PATH}/media
-# RUN for f in *.* ; do (cwebp -q 80 $f -o $f.webp) ; done
+COPY nginx.conf nginx.conf
+COPY conf.d conf.d
 
 
 
@@ -104,15 +73,15 @@ FROM alpine AS production
 RUN apk update
 RUN apk add pcre
 
-# # Static files
-WORKDIR /etc/nginx/data
-COPY --from=build-app /usr/app/build .
-
 # Nginx
 WORKDIR /etc/nginx
 COPY --from=build-nginx /etc/nginx .
 COPY --from=build-nginx /usr/sbin/nginx /usr/sbin/nginx
 COPY --from=build-nginx /var/log/nginx /var/log/nginx
+
+# Static files
+WORKDIR /etc/nginx/data
+COPY --from=build-app /usr/app/build .
 
 # Logs
 RUN ln -sf /dev/stdout /var/log/nginx/access.log 
@@ -130,10 +99,12 @@ CMD ["nginx", "-g", "daemon off;"]
 FROM production AS development
 
 # SSL certificates
+WORKDIR /etc/nginx/certs
+# ADD services/nginx/ssl ./certs
+RUN apk add openssl
+RUN openssl req -x509 -out localhost.com.crt -keyout localhost.com.key \
+			-newkey rsa:2048 -nodes -sha256 \
+			-subj '/CN=localhost' -extensions EXT -config <( \
+			printf "[dn]\nCN=localhost\n[req]\ndistinguished_name = dn\n[EXT]\nsubjectAltName=DNS:localhost\nkeyUsage=digitalSignature\nextendedKeyUsage=serverAuth")
+
 WORKDIR /etc/nginx
-ADD services/nginx/ssl ./certs
-# RUN apk add openssl
-# RUN openssl req -x509 -out ./certs/localhost.com.crt -keyout ./certs/localhost.com.key \
-# 			-newkey rsa:2048 -nodes -sha256 \
-# 			-subj '/CN=localhost' -extensions EXT -config <( \
-# 			printf "[dn]\nCN=localhost\n[req]\ndistinguished_name = dn\n[EXT]\nsubjectAltName=DNS:localhost\nkeyUsage=digitalSignature\nextendedKeyUsage=serverAuth")
