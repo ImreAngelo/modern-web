@@ -10,6 +10,7 @@ RUN apt-get install -y webp brotli
 # Build app
 WORKDIR /usr/app
 ADD . .
+COPY next.config.docker.mjs next.config.mjs
 RUN yarn install
 RUN yarn next telemetry disable
 RUN yarn build

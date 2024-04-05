@@ -1,4 +1,5 @@
 build
 node_modules
+next.config*.mjs
 .next
 .yarn
