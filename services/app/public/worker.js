@@ -13,6 +13,11 @@ workbox.loadModule('workbox-expiration')
 
 self.addEventListener('fetch', (event) => {
 	const { request } = event
+	// const { pathname } = new URL(event.request.url)
+
+	// // DEBUGGING: Do not cache API calls
+	// if(pathname.startsWith("/v1/"))
+	// 	return
 
 	// Cache everything
 	event.respondWith(
