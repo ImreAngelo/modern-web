@@ -17,7 +17,7 @@ export const revalidate = 10
 
 async function populateFromServer(postID) {
     // Fetch data from external API
-    const res = await fetch(`http://localhost:4000/v1/post/random`)
+    const res = await fetch(`${process.env.API_HOST}/${process.env.API_VERSION}/post/random`)
     const data = await res.json()
 
     // Pass data to the page via props
