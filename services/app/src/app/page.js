@@ -14,7 +14,7 @@ export default function Home() {
 		navigator.serviceWorker.register("/sw.js");
 
 		// TODO: Only ask for permission when user opts in, for instance by registering a user
-		Notification.requestPermission().catch(() => {});
+		// Notification.requestPermission().catch(() => {});
 	}, [])
 
 
