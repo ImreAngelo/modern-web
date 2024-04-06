@@ -94,13 +94,23 @@ CMD ["nginx", "-g", "daemon off;"]
 
 
 # ======
-# Development build with localhost certificates
+# Development build with trusted localhost certificates
 # ======
 FROM production AS development
 
 # SSL certificates
+WORKDIR /etc/nginx
+ADD ssl certs
+
+
+
+# ======
+# Development build with untrusted localhost certificates
+# ======
+FROM production AS nossl-development
+
+# SSL certificates
 WORKDIR /etc/nginx/certs
-# ADD services/nginx/ssl ./certs
 RUN apk add openssl
 RUN openssl req -x509 -out localhost.com.crt -keyout localhost.com.key \
 			-newkey rsa:2048 -nodes -sha256 \

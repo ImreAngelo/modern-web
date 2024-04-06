@@ -6,7 +6,7 @@
 	"license": "MIT",
 	"private": true,
 	"scripts": {
-		"ssl": "py ./scripts/init.py",
+		"ssl": "python3 ./scripts/init.py",
 		"git:update": "git submodule update --init --recursive",
 		"docker:up": "docker compose -f \"docker-compose.yml\" up -d --build",
 		"dev": "yarn workspaces foreach -Apt run dev"
