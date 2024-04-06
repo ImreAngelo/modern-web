@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import styles from "./page.module.css";
+import { Workbox } from "workbox-window";
 import { useEffect } from "react";
 
 export default function Home() {
@@ -12,6 +13,8 @@ export default function Home() {
 		}
 
 		// navigator.serviceWorker.register("/sw.js");
+		const wb = new Workbox("/worker.js", { scope: "/" });
+    	wb.register();
 
 		// TODO: Only ask for permission when user opts in, for instance by registering a user
 		// Notification.requestPermission().catch(() => {});
