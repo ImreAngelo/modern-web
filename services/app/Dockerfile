@@ -52,5 +52,8 @@ COPY --from=build /usr/app/${PUBLIC_PATH} public
 EXPOSE 3000
 ENV PORT 3000
 
+# Settings that differ from non-docker build
+ENV POST_API http://post:4000/v1
+
 CMD node server.js
 # CMD tail -f /dev/null

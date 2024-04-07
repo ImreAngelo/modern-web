@@ -3,7 +3,7 @@
   "packageManager": "yarn@4.1.0",
   "index": "src",
   "scripts": {
-    "dev": "nodemon -L ./src/index.js"
+    "dev": "PORT=4000 nodemon -L ./src/index.js"
   },
   "dependencies": {
     "express": "^4.19.2"

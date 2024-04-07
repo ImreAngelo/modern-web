@@ -44,19 +44,18 @@ export const revalidate = 10
 
 async function populateFromServer(postID) {
     // TODO: Default variables and exclude .env files from git
-    // const { API_HOST, API_VERSION } = process.env; 
+    const { POST_API } = process.env; 
+    console.log(`[${postID}] Fetching ${POST_API}/post/random`);
     
     // Fetch data from external API
-    // const res = await fetch(`${process.env.API_HOST}/${process.env.API_VERSION}/post/random`)
-    // const data = await res.json()
+    const res = await fetch(`${POST_API}/post/random`);
+    const data = await res.json();
 
-    const random = Math.floor(Math.random() * 100);
-
-    const data = {
-        id:random,
-        title:"Sample Page", 
-        description:"Lorem ipsum..."
-    }
+    // const data = {
+    //     id:Math.floor(Math.random() * 100),
+    //     title:"Sample Page", 
+    //     description:"Lorem ipsum..."
+    // }
 
     // Pass data to the page via props
     return data

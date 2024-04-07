@@ -1,6 +1,6 @@
 const express = require('express')
 const app = express()
-const port = 4000
+const port = process.env.PORT
 
 const post = (id, title, description) => { return { id:id, title:title, description:description }}
 const posts = [
@@ -10,9 +10,10 @@ const posts = [
 ]
 
 app.get('/v1/post/random', (req, res) => {
+    console.log("Requested random post.")
     res.send(posts[Math.floor(Math.random() * posts.length)])
 })
 
 app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`)
+    console.log(`Listening on port ${port}`)
 })
