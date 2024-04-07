@@ -1,15 +1,11 @@
 version: '3'
 services:
   app:
-    container_name: app-ssr
+    container_name: app-renderer
     build: 
       context: services/app
       target: ssr # ssr | build
     image: build-app:latest
-    tty: true
-    stdin_open: true
-    ports:
-      - 3000:3000
   proxy:
     container_name: nginx-proxy
     build:
