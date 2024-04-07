@@ -3,9 +3,14 @@ import Image from './earth.jpg'
 
 export default async function Post({ params }) {
     const { postID } = params; 
-    const data = await populateFromServer(postID);
+    const { status, data } = await populateFromServer(postID);
 
-    return (
+    return (status == 301) ? (
+        <div>
+            {/* Other metadata here */}
+            Not authorized!
+        </div>
+    ) : (
         <div>
             { metadata(data, postID) }
             <div>{ data.title } ({ data.id } / { postID })</div>
@@ -18,7 +23,7 @@ export default async function Post({ params }) {
                 <img src={Image.src} alt="The Earth" />
             </div>
         </div>
-    )
+    );
 }
 
 // Metadata for social sharing and search engines
@@ -45,10 +50,10 @@ export const revalidate = 10
 async function populateFromServer(postID) {
     // TODO: Default variables and exclude .env files from git
     const { POST_API } = process.env; 
-    console.log(`[${postID}] Fetching ${POST_API}/post/random`);
+    console.log(`[${postID}] Fetching ${POST_API}/post/${postID}`);
     
     // Fetch data from external API
-    const res = await fetch(`${POST_API}/post/random`);
+    const res = await fetch(`${POST_API}/post/${postID}`);
     const data = await res.json();
 
     // const data = {
@@ -58,5 +63,8 @@ async function populateFromServer(postID) {
     // }
 
     // Pass data to the page via props
-    return data
+    return {
+        status: res.status,
+        data: data
+    }
 }

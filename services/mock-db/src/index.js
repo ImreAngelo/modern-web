@@ -9,8 +9,14 @@ const posts = [
     post(2, "Oh...", "Thdasda description"),
 ]
 
-app.get('/v1/post/random', (req, res) => {
-    console.log("Requested random post.")
+app.get('/v1/post/:id', (req, res) => {
+    console.log("Requested post with id: " + req.params.id)
+    if(req.params.id % 2) {
+        console.log("Simulating unauthorized request")
+        res.status(301).send({});
+        return;
+    }
+
     res.send(posts[Math.floor(Math.random() * posts.length)])
 })
 
