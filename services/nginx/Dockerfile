@@ -79,13 +79,13 @@ COPY --from=build-nginx /etc/nginx .
 COPY --from=build-nginx /usr/sbin/nginx /usr/sbin/nginx
 COPY --from=build-nginx /var/log/nginx /var/log/nginx
 
-# Static files
-WORKDIR /etc/nginx/data
-COPY --from=build-app /usr/app/build .
-
 # Logs
 RUN ln -sf /dev/stdout /var/log/nginx/access.log 
-RUN ln -sf /dev/stderr /var/log/nginx/error.log 
+RUN ln -sf /dev/stderr /var/log/nginx/error.log
+
+# Static files
+WORKDIR /etc/nginx/data
+COPY --from=build-app /usr/app/public ./_next/static
 
 # Startup
 WORKDIR /

@@ -55,8 +55,14 @@ async function populateFromServer(postID) {
     // const { API_HOST, API_VERSION } = process.env; 
     
     // Fetch data from external API
-    const res = await fetch(`${process.env.API_HOST}/${process.env.API_VERSION}/post/random`)
-    const data = await res.json()
+    // const res = await fetch(`${process.env.API_HOST}/${process.env.API_VERSION}/post/random`)
+    // const data = await res.json()
+
+    const data = {
+        id:69, 
+        title:"Sample Page", 
+        description:"Lorem ipsum..."
+    }
 
     // Pass data to the page via props
     return data
