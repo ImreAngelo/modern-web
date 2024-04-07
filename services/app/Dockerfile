@@ -10,7 +10,7 @@ RUN apt-get install -y brotli libavif-bin webp
 # Build app
 WORKDIR /usr/src
 ADD . .
-RUN yarn install
+RUN yarn install --immutable
 RUN yarn next telemetry disable
 RUN yarn build
 
@@ -23,7 +23,7 @@ WORKDIR /usr/app
 RUN mv /usr/src/build/static ${PUBLIC_PATH}
 RUN mv /usr/src/public/* ${PUBLIC_PATH}
 
-# # TODO: remove _next from requests + prerender routes
+# # TODO: remove _next from requests and prerender static routes
 # RUN sed -i "s/standalone/export/" next.config.mjs
 # RUN yarn build
 

@@ -1,4 +1,5 @@
 import React from "react";
+import Image from './earth.jpg'
 
 export default async function Post({ params }) {
     const { postID } = params; 
@@ -9,6 +10,13 @@ export default async function Post({ params }) {
             { metadata(data, postID) }
             <div>{ data.title } ({ data.id } / { postID })</div>
             <div>{ data.description }</div>
+
+            <div style={{
+                maxWidth: "50vw",
+                maxHeight: "50vh"
+            }}>
+                <img src={Image.src} alt="The Earth" />
+            </div>
         </div>
     )
 }
