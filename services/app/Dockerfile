@@ -33,9 +33,8 @@ RUN mv /usr/src/public/* ${PUBLIC_PATH}
 # RUN sed -i "s/_next\/static/$PUBLIC_PATH/g" *.* ${PUBLIC_PATH}/**/*.*
 
 # Compress files
-RUN gzip -9k -r ${PUBLIC_PATH}
-# RUN brotli -k -Z *.* ${PUBLIC_PATH}/chunks/*.js ${PUBLIC_PATH}/chunks/pages/*.js ${PUBLIC_PATH}/css/*.css 
-# RUN rm *.gz.br
+WORKDIR /usr/app/${PUBLIC_PATH}
+RUN /usr/src/compress.sh
 
 
 
