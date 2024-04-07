@@ -17,7 +17,7 @@ export default async function Post({ params }) {
 const metadata = (data, postID) => (
     <>
         <title>{ data.title }</title>
-        <description>{ data.description }</description>
+        <meta name="description" content={ data.description }/>
         <meta property="og:title" content={ data.title }/>
         <meta property="og:description" content={ data.title }/>
         <meta property="og:type" content="article"/>
