@@ -6,6 +6,9 @@ do
     brotli -k -Z "$f"
 done
 
-# Image files
-# WebP
-# Avif
+# Compress image files
+for f in `find | grep -E "\.jp*g$|\.png$"`
+do 
+    cwebp -q 90 "$f" -o "$f.webp"
+    avifenc "$f" "$f.avif"
+done

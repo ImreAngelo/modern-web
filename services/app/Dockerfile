@@ -5,7 +5,7 @@ FROM node:lts AS build
 ARG PUBLIC_PATH=public
 
 RUN apt-get update
-RUN apt-get install -y webp brotli
+RUN apt-get install -y brotli libavif-bin webp
 
 # Build app
 WORKDIR /usr/src
