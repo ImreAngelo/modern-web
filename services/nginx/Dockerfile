@@ -78,6 +78,7 @@ WORKDIR /etc/nginx
 COPY --from=build-nginx /etc/nginx .
 COPY --from=build-nginx /usr/sbin/nginx /usr/sbin/nginx
 COPY --from=build-nginx /var/log/nginx /var/log/nginx
+RUN mkdir cache
 
 # Logs
 RUN ln -sf /dev/stdout /var/log/nginx/access.log 
