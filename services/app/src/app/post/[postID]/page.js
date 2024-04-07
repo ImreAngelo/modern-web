@@ -1,15 +1,16 @@
 import React from "react";
 import Image from './earth.jpg'
+import LoginPage from "~/components/login";
 
 export default async function Post({ params }) {
     const { postID } = params; 
     const { status, data } = await populateFromServer(postID);
 
     return (status == 301) ? (
-        <div>
+        <>
             {/* Other metadata here */}
-            Not authorized!
-        </div>
+            <LoginPage/>
+        </>
     ) : (
         <div>
             { metadata(data, postID) }
@@ -55,12 +56,6 @@ async function populateFromServer(postID) {
     // Fetch data from external API
     const res = await fetch(`${POST_API}/post/${postID}`);
     const data = await res.json();
-
-    // const data = {
-    //     id:Math.floor(Math.random() * 100),
-    //     title:"Sample Page", 
-    //     description:"Lorem ipsum..."
-    // }
 
     // Pass data to the page via props
     return {
