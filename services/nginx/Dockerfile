@@ -78,13 +78,12 @@ WORKDIR /etc/nginx
 COPY --from=build-nginx /etc/nginx .
 COPY --from=build-nginx /usr/sbin/nginx /usr/sbin/nginx
 COPY --from=build-nginx /var/log/nginx /var/log/nginx
-RUN mkdir cache
 
 # Logs
 RUN ln -sf /dev/stdout /var/log/nginx/access.log 
 RUN ln -sf /dev/stderr /var/log/nginx/error.log
 
-# Static files
+# Static files (TODO: remove _next/static from requests)
 WORKDIR /etc/nginx/data
 COPY --from=build-app /usr/app/public ./_next/static
 
