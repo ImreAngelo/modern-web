@@ -1,20 +1,35 @@
 # ========================
-# Build web app
+#  Build web app and compress static files
+#  TODO: Compress static files in nginx build?
 # ========================
 FROM node:lts AS build
-ARG PUBLIC_PATH=static
 
 RUN apt-get update
-RUN apt-get install -y webp brotli
+RUN apt-get install -y brotli libavif-bin webp
 
 # Build app
-WORKDIR /usr/app
-ADD . .
+WORKDIR /usr/src
+ADD package*.json .
+ADD next.config.mjs .
 RUN yarn install
-RUN yarn prebuild
+RUN yarn next telemetry disable
+ADD src src
 RUN yarn build
 
+# Get artifacts
+WORKDIR /usr
+RUN mv src/build/static app
+RUN mv src/build/server/app/* app
+RUN mv src/build/server/pages/*.html app
+ADD public app
 
+# ARG PUBLIC_PATH=static
+# RUN mv ./src/compress.sh app
+# WORKDIR /usr/app
+# RUN ./compress.sh
+
+# TODO: Include static HTML files
+# TODO: Remove '_next/static' from requests
 
 # # Remove '_next/static' from requests
 # WORKDIR /usr/app/build/
@@ -35,3 +50,23 @@ RUN yarn build
 
 # WORKDIR /usr/app/build/${PUBLIC_PATH}/media
 # RUN for f in *.* ; do (cwebp -q 80 $f -o $f.webp) ; done
+
+
+# =============================
+#  Slim down image and use SSR
+# =============================
+FROM node:alpine AS standalone
+ARG PRIVATE_PATH=/opt/site
+ARG PUBLIC_PATH=/usr/app
+
+WORKDIR ${PRIVATE_PATH}
+COPY --from=build /usr/src/build/standalone ${PRIVATE_PATH}
+COPY --from=build /usr/app ${PRIVATE_PATH}/build/static
+
+# Nginx expects to find static files in /usr/app
+RUN ln -s ${PRIVATE_PATH}/build/static /usr/app
+
+# Run server
+EXPOSE 3000
+WORKDIR ${PRIVATE_PATH}
+CMD node server.js

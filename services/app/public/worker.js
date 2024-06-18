@@ -11,15 +11,14 @@ const { CacheableResponsePlugin } = workbox.cacheableResponse;
 const { ExpirationPlugin } = workbox.expiration;
 
 // Config
-const version = 'v4';
-const networkTimeout = 1;
+const version = 'v1';
 
 // TODO: Inject manifest
 // https://developer.chrome.com/docs/workbox/modules/workbox-cli
 
 // Static resources
 routing.registerRoute(
-	({ url, request }) => (request.destination === 'image' || url.pathname.startsWith('/_next/')), 
+	({ url, request }) => (request.destination === 'image' || url.pathname.startsWith('/_next/')),
 	new strategies.StaleWhileRevalidate({
 		cacheName: version,
 		plugins: [
@@ -39,26 +38,6 @@ routing.registerRoute(
 routing.registerRoute(
 	({ request }) => request.mode === 'navigate',
 	new strategies.StaleWhileRevalidate({
-		cacheName: version,
-		plugins: [
-			// Only cache valid pages
-			new CacheableResponsePlugin({
-				statuses: [0, 200],
-			}),
-			new ExpirationPlugin({
-				maxEntries: 300,
-				maxAgeSeconds: 7 * 86400,
-				purgeOnQuotaError: true,
-			}),
-		]
-	})
-);
-
-// Dynamic Routing (blog)
-routing.registerRoute(
-	({ url }) => url.pathname.startsWith('/blog/'),
-	new strategies.NetworkFirst({
-		networkTimeoutSeconds: networkTimeout,
 		cacheName: version,
 		plugins: [
 			// Only cache valid pages

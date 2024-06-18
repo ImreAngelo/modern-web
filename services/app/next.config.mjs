@@ -4,9 +4,9 @@ const nextConfig = {
 	output: 'standalone',
 	trailingSlash: true,
 	productionBrowserSourceMaps: true,
-    eslint: {
-        ignoreDuringBuilds: true,
-    },
+    // eslint: {
+    //     ignoreDuringBuilds: true,
+    // },
 };
 
 export default nextConfig;

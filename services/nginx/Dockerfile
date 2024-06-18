@@ -1,5 +1,3 @@
-ARG GET_DEPENDENCIES=clone
-
 # ======
 # Clone dependencies from git repositories
 # Allows cloning repo without submodules and installing only inside Docker
@@ -11,10 +9,6 @@ RUN apk update
 RUN apk add git
 RUN git clone --recurse-submodules -j8 https://github.com/google/ngx_brotli
 RUN git clone https://github.com/quictls/openssl
-
-
-
-# # ======
 # # Copy dependencies from vendors folder
 # # Allows using submodules
 # # ======
@@ -29,7 +23,7 @@ RUN git clone https://github.com/quictls/openssl
 # Build Nginx from source, with additional features:
 # HTTP/3 (QUIC over UDP), gzip and brotli compression, responsive images (filter module)
 # ======
-FROM ${GET_DEPENDENCIES}-dependencies AS build-nginx
+FROM clone-dependencies AS build-nginx
 ARG NGINX_VERSION=1.25.1
 
 # Get required packages
@@ -52,28 +46,24 @@ RUN cmake --build . --config Release --target brotlienc
 WORKDIR /home/nginx-${NGINX_VERSION}
 RUN export CFLAGS="-m64 -march=native -mtune=native -Ofast -flto -funroll-loops -ffunction-sections -fdata-sections -Wl,--gc-sections"
 RUN export LDFLAGS="-m64 -Wl,-s -Wl,-Bsymbolic -Wl,--gc-sections"
-# RUN ./configure \
-# 	--add-module=/home/ngx_brotli \
-# 	--prefix=/etc/nginx \
-# 	--conf-path=/etc/nginx/nginx.conf \
-# 	--sbin-path=/usr/sbin/nginx \
-# 	--with-debug \
-# 	--with-http_gzip_static_module \
-# 	--with-http_image_filter_module \
-# 	--with-http_v2_module \
-# 	--with-http_v3_module \
-# 	--with-cc-opt="-I../openssl/build/include" \
-# 	--with-ld-opt="-L../openssl/build/lib"
-# RUN make && make install
-
-CMD tail -f /dev/null
+RUN ./configure \
+	--add-module=/home/ngx_brotli \
+	--prefix=/etc/nginx \
+	--conf-path=/etc/nginx/nginx.conf \
+	--sbin-path=/usr/sbin/nginx \
+	--with-debug \
+	--with-http_gzip_static_module \
+	--with-http_image_filter_module \
+	--with-http_v2_module \
+	--with-http_v3_module \
+	--with-cc-opt="-I../openssl/build/include" \
+	--with-ld-opt="-L../openssl/build/lib"
+RUN make && make install
 
 # Logs
 WORKDIR /var/log/nginx
 RUN touch /var/log/nginx/error.log
 RUN touch /var/log/nginx/access.log
-RUN ln -sf /dev/stdout /var/log/nginx/access.log 
-RUN ln -sf /dev/stderr /var/log/nginx/error.log 
 
 
 
@@ -93,11 +83,14 @@ COPY --from=build-nginx /etc/nginx .
 COPY --from=build-nginx /usr/sbin/nginx /usr/sbin/nginx
 COPY --from=build-nginx /var/log/nginx /var/log/nginx
 
+# Logs
+RUN ln -sf /dev/stdout /var/log/nginx/access.log 
+RUN ln -sf /dev/stderr /var/log/nginx/error.log 
+
 # Static files
 COPY --from=build-app /usr/app data
 
 # Config
-WORKDIR /etc/nginx
 COPY nginx.conf nginx.conf
 COPY conf.d conf.d
 

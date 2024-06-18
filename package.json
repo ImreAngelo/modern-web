@@ -7,7 +7,6 @@
 	"private": true,
 	"scripts": {
 		"ssl": "python3 ./scripts/init.py",
-		"git:update": "git submodule update --init --recursive",
 		"docker": "docker compose -f \"docker-compose.yml\" up -d --build",
 		"dev": "yarn workspaces foreach -Apt run dev"
 	},

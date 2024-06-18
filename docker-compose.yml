@@ -1,14 +1,13 @@
-version: '3'
 services:
   app:
     build: 
       context: services/app
-      target: build
+      target: standalone
     image: build-app:latest
   proxy:
     build:
       context: services/nginx
-      target: build-nginx
+      target: development
     depends_on:
       - app
     ports:
