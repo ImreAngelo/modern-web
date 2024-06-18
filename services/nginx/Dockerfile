@@ -75,7 +75,7 @@ FROM alpine AS production
 # ARG GET_STATIC_FROM=build-app
 
 RUN apk update
-RUN apk add pcre gd
+RUN apk add --update pcre gd brotli libavif-apps libwebp-tools
 
 # Nginx
 WORKDIR /etc/nginx
@@ -84,11 +84,16 @@ COPY --from=build-nginx /usr/sbin/nginx /usr/sbin/nginx
 COPY --from=build-nginx /var/log/nginx /var/log/nginx
 
 # Logs
-RUN ln -sf /dev/stdout /var/log/nginx/access.log 
-RUN ln -sf /dev/stderr /var/log/nginx/error.log 
+RUN ln -sf /dev/stdout /var/log/nginx/access.log
+RUN ln -sf /dev/stderr /var/log/nginx/error.log
 
 # Static files
 COPY --from=build-app /usr/app data
+
+# Optimize
+COPY compress.sh data/compress.sh
+RUN ./data/compress.sh
+RUN rm data/compress.sh
 
 # Config
 COPY nginx.conf nginx.conf

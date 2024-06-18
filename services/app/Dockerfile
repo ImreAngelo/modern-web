@@ -5,7 +5,6 @@
 FROM node:lts AS build
 
 RUN apt-get update
-RUN apt-get install -y brotli libavif-bin webp
 
 # Build app
 WORKDIR /usr/src
