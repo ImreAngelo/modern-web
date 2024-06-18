@@ -1,0 +1,6 @@
+[submodule "openssl"]
+	path = services/nginx/vendors/openssl
+	url = https://github.com/quictls/openssl
+[submodule "ngx_brotli"]
+	path = services/nginx/vendors/ngx_brotli
+	url = https://github.com/google/ngx_brotli
