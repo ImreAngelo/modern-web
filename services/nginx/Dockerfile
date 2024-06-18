@@ -1,7 +1,4 @@
-# Set GET_DEPENDENCIES to 'copy' or 'clone' to copy git repos 
-ARG GET_DEPENDENCIES=copy
-
-
+ARG GET_DEPENDENCIES=clone
 
 # ======
 # Clone dependencies from git repositories
@@ -17,17 +14,14 @@ RUN git clone https://github.com/quictls/openssl
 
 
 
-# ======
-# Copy dependencies from vendors folder
-# Allows using submodules
-# ======
-FROM alpine AS copy-dependencies
-
-# Path to git submodules
-ARG VENDOR_DIR=./vendors
-
-RUN apk update
-COPY ${VENDOR_DIR} /home
+# # ======
+# # Copy dependencies from vendors folder
+# # Allows using submodules
+# # ======
+# FROM alpine AS copy-dependencies
+# # Path to git submodules
+# ARG VENDOR_DIR=./vendors
+# COPY ${VENDOR_DIR} /home
 
 
 
@@ -43,8 +37,8 @@ RUN apk --update add make cmake g++ zlib-dev linux-headers pcre-dev openssl-dev 
 
 # Get Nginx source code
 WORKDIR /home
-RUN wget https://nginx.org/download/nginx-$NGINX_VERSION.tar.gz
-RUN tar xvf nginx-$NGINX_VERSION.tar.gz
+RUN wget https://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz
+RUN tar xvf nginx-${NGINX_VERSION}.tar.gz
 
 # Enable brotli compression
 WORKDIR /home/ngx_brotli/deps/brotli/out
@@ -55,22 +49,24 @@ RUN cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF \
 RUN cmake --build . --config Release --target brotlienc
 
 # Build Nginx from source
-WORKDIR /home/nginx-$NGINX_VERSION
+WORKDIR /home/nginx-${NGINX_VERSION}
 RUN export CFLAGS="-m64 -march=native -mtune=native -Ofast -flto -funroll-loops -ffunction-sections -fdata-sections -Wl,--gc-sections"
 RUN export LDFLAGS="-m64 -Wl,-s -Wl,-Bsymbolic -Wl,--gc-sections"
-RUN ./configure \
-	--add-module=/home/ngx_brotli \
-	--prefix=/etc/nginx \
-	--conf-path=/etc/nginx/nginx.conf \
-	--sbin-path=/usr/sbin/nginx \
-	--with-debug \
-	--with-http_gzip_static_module \
-	--with-http_image_filter_module \
-	--with-http_v2_module \
-	--with-http_v3_module \
-	--with-cc-opt="-I../openssl/build/include" \
-	--with-ld-opt="-L../openssl/build/lib"
-RUN make && make install
+# RUN ./configure \
+# 	--add-module=/home/ngx_brotli \
+# 	--prefix=/etc/nginx \
+# 	--conf-path=/etc/nginx/nginx.conf \
+# 	--sbin-path=/usr/sbin/nginx \
+# 	--with-debug \
+# 	--with-http_gzip_static_module \
+# 	--with-http_image_filter_module \
+# 	--with-http_v2_module \
+# 	--with-http_v3_module \
+# 	--with-cc-opt="-I../openssl/build/include" \
+# 	--with-ld-opt="-L../openssl/build/lib"
+# RUN make && make install
+
+CMD tail -f /dev/null
 
 # Logs
 WORKDIR /var/log/nginx

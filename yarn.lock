@@ -1831,13 +1831,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jest-teamcity@npm:^1.11.0":
-  version: 1.11.0
-  resolution: "jest-teamcity@npm:1.11.0"
-  checksum: 10c0/42fb8d33ee71eff5efb52d8e9eb406b80c2b693dd6ac52a9f7e9f6c50b806b516000e0fe1ae84a1e2ff191b66061e65d9e9c4af0983add2c4e28dda029cdf49e
-  languageName: node
-  linkType: hard
-
 "js-tokens@npm:^3.0.0 || ^4.0.0":
   version: 4.0.0
   resolution: "js-tokens@npm:4.0.0"
@@ -2030,8 +2023,6 @@ __metadata:
 "modern-web@workspace:.":
   version: 0.0.0-use.local
   resolution: "modern-web@workspace:."
-  dependencies:
-    jest-teamcity: "npm:^1.11.0"
   languageName: unknown
   linkType: soft
 
