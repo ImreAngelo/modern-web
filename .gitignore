@@ -3,14 +3,10 @@ build
 dist
 node_modules
 .next
-services/nginx/ssl/localhost*
+services/nginx/ssl/localhost.*
 
 # Python
 .venv
 
 # Platform-specific
 scripts/ssl/mkcert.exe
-
-# Temp
-.gitmodules
-/services/nginx/vendors
