@@ -1,0 +1,17 @@
+version: '3'
+services:
+  app:
+    build: 
+      context: services/app
+      target: build
+    image: build-app:latest
+  proxy:
+    build:
+      context: services/nginx
+      target: nossl-development
+    depends_on:
+      - app
+    ports:
+      - 80:80
+      - 443:443
+      - 443:443/udp

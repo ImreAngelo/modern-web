@@ -1,0 +1,9 @@
+build
+dist
+node_modules
+Dockerfile
+*.md
+*local.env
+.gitignore
+.next
+.yarn

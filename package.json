@@ -1,0 +1,21 @@
+{
+	"name": "modern-web",
+	"version": "1.0.0",
+	"main": "index.js",
+	"author": "Imre Angelo <imre@angelo.no>",
+	"license": "MIT",
+	"private": true,
+	"scripts": {
+		"ssl": "python3 ./scripts/init.py",
+		"git:update": "git submodule update --init --recursive",
+		"docker": "docker compose -f \"docker-compose.yml\" up -d --build",
+		"dev": "yarn workspaces foreach -Apt run dev"
+	},
+	"workspaces": [
+		"services/*"
+	],
+	"devDependencies": {
+		"jest-teamcity": "^1.11.0"
+	},
+	"packageManager": "yarn@4.3.0"
+}
