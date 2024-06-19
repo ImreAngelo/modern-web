@@ -6,15 +6,18 @@
 	"license": "MIT",
 	"private": true,
 	"scripts": {
-		"init": "python3 ./scripts/init.py",
+        "init": "python3 ./scripts/init.py",
 		"dev": "yarn workspaces foreach -Apt run dev",
 		"compose": "docker compose -f \"docker-compose.yml\" up -d --build",
         "build": "docker compose -f \"docker-compose.yml\" build",
         "deploy": "echo \"Not implemented\"",
         "test": "echo \"Not implemented\""
 	},
+    "packageManager": "yarn@4.3.0",
 	"workspaces": [
 		"services/*"
 	],
-	"packageManager": "yarn@4.3.0"
+    "resolutions": {
+        "braces": ">=3.0.3"
+    }
 }
