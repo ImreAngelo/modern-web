@@ -7,7 +7,7 @@ do
     brotli -k -Z "$f"
 done
 
-# Compress image files as webp and avif in media directory
+# Compress image files as webp and avif
 for f in `find | grep -E "media\/(.*)(\.jpe?g|\.png)$"`
 do 
     echo "Compressing image: $f"
