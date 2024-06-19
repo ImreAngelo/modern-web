@@ -6,9 +6,12 @@
 	"license": "MIT",
 	"private": true,
 	"scripts": {
-		"ssl": "python3 ./scripts/init.py",
-		"docker": "docker compose -f \"docker-compose.yml\" up -d --build",
-		"dev": "yarn workspaces foreach -Apt run dev"
+		"init": "python3 ./scripts/init.py",
+		"dev": "yarn workspaces foreach -Apt run dev",
+		"compose": "docker compose -f \"docker-compose.yml\" up -d --build",
+        "build": "docker compose -f \"docker-compose.yml\" build",
+        "deploy": "echo \"Not implemented\"",
+        "test": "echo \"Not implemented\""
 	},
 	"workspaces": [
 		"services/*"
