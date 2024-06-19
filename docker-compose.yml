@@ -1,11 +1,11 @@
-version: '3'
 services:
   app:
+    image: build-app:${VERSION_TAG}
     build: 
       context: services/app
-      target: build
-    image: build-app:latest
+      target: standalone
   proxy:
+    image: app-proxy:${VERSION_TAG}
     build:
       context: services/nginx
       target: development

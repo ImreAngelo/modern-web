@@ -20,7 +20,6 @@ export default function Home() {
 		// Notification.requestPermission().catch(() => {});
 	}, [])
 
-
 	return (
 		<main className={styles.main}>
 			<div className={styles.description}>
