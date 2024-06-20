@@ -1,16 +1,18 @@
 services:
-  app:
+  nextjs:
+    container_name: nextjs
     image: build-app:${VERSION_TAG}
     build: 
       context: services/app
       target: standalone
   proxy:
+    container_name: nginx
     image: app-proxy:${VERSION_TAG}
     build:
       context: services/nginx
       target: development
     depends_on:
-      - app
+      - nextjs
     ports:
       - 80:80
       - 443:443

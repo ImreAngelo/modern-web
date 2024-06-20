@@ -1,27 +1,7 @@
-"use client";
-
 import Image from "next/image";
 import styles from "./page.module.css";
-import { Workbox } from "workbox-window";
-import { useEffect } from "react";
-
-import TestImage from "./test.jpg";
 
 export default function Home() {
-	useEffect(() => {
-		if (!('serviceWorker' in navigator)) {
-			// Service Worker isn't supported on this browser.
-			return;
-		}
-
-		// navigator.serviceWorker.register("/sw.js");
-		const wb = new Workbox("/worker.js", { scope: "/" });
-    	wb.register();
-
-		// TODO: Only ask for permission when user opts in, for instance by registering a user
-		// Notification.requestPermission().catch(() => {});
-	}, [])
-
 	return (
 		<main className={styles.main}>
 			<div className={styles.description}>
@@ -51,13 +31,10 @@ export default function Home() {
 			<div className={styles.center}>
 				<Image
 				className={styles.logo}
-				// src="/next.svg"
+				src="/next.svg"
 				alt="Next.js Logo"
-                src={TestImage.src}
-                width={TestImage.width}
-                height={TestImage.height}
-				// width={180}
-				// height={37}
+				width={180}
+				height={37}
 				priority
 				/>
 			</div>

@@ -12,6 +12,7 @@ const { ExpirationPlugin } = workbox.expiration;
 
 // Config
 const version = 'v1';
+const networkTimeout = 1;
 
 // TODO: Inject manifest
 // https://developer.chrome.com/docs/workbox/modules/workbox-cli
@@ -39,6 +40,26 @@ routing.registerRoute(
 	({ request }) => request.mode === 'navigate',
 	new strategies.StaleWhileRevalidate({
 		cacheName: version,
+		plugins: [
+			// Only cache valid pages
+			new CacheableResponsePlugin({
+				statuses: [0, 200],
+			}),
+			new ExpirationPlugin({
+				maxEntries: 300,
+				maxAgeSeconds: 7 * 86400,
+				purgeOnQuotaError: true,
+			}),
+		]
+	})
+);
+
+// Routing (dynamic)
+routing.registerRoute(
+	({ url, request }) => (request.mode === 'navigate' && url.pathname.startsWith('/test/')),
+	new strategies.NetworkFirst({
+		cacheName: version,
+        networkTimeoutSeconds: networkTimeout,
 		plugins: [
 			// Only cache valid pages
 			new CacheableResponsePlugin({
