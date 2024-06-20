@@ -1,27 +1,9 @@
-"use client";
-
 import Image from "next/image";
 import styles from "./page.module.css";
-import { Workbox } from "workbox-window";
-import { useEffect } from "react";
 
 import TestImage from "./test.jpg";
 
 export default function Home() {
-	useEffect(() => {
-		if (!('serviceWorker' in navigator)) {
-			// Service Worker isn't supported on this browser.
-			return;
-		}
-
-		// navigator.serviceWorker.register("/sw.js");
-		const wb = new Workbox("/worker.js", { scope: "/" });
-    	wb.register();
-
-		// TODO: Only ask for permission when user opts in, for instance by registering a user
-		// Notification.requestPermission().catch(() => {});
-	}, [])
-
 	return (
 		<main className={styles.main}>
 			<div className={styles.description}>
