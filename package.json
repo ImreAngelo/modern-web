@@ -11,7 +11,8 @@
 		"compose": "docker compose -f \"docker-compose.yml\" up -d --build",
 		"build": "docker compose -f \"docker-compose.yml\" build",
 		"deploy": "echo \"Not implemented\"",
-		"test": "echo \"Not implemented\""
+		"test": "echo \"Not implemented\"",
+		"audit": "yarn npm audit -AR"
 	},
 	"packageManager": "yarn@4.3.0",
 	"workspaces": [
