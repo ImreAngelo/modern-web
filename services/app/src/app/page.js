@@ -5,6 +5,8 @@ import styles from "./page.module.css";
 import { Workbox } from "workbox-window";
 import { useEffect } from "react";
 
+import TestImage from "./test.jpg";
+
 export default function Home() {
 	useEffect(() => {
 		if (!('serviceWorker' in navigator)) {
@@ -49,10 +51,13 @@ export default function Home() {
 			<div className={styles.center}>
 				<Image
 				className={styles.logo}
-				src="/next.svg"
+				// src="/next.svg"
 				alt="Next.js Logo"
-				width={180}
-				height={37}
+                src={TestImage.src}
+                width={TestImage.width}
+                height={TestImage.height}
+				// width={180}
+				// height={37}
 				priority
 				/>
 			</div>
