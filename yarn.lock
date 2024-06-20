@@ -104,7 +104,6 @@ __metadata:
     next: "npm:14.2.4"
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
-    workbox-window: "npm:^7.1.0"
   languageName: unknown
   linkType: soft
 
@@ -249,13 +248,6 @@ __metadata:
   version: 0.0.29
   resolution: "@types/json5@npm:0.0.29"
   checksum: 10c0/6bf5337bc447b706bb5b4431d37686aa2ea6d07cfd6f79cc31de80170d6ff9b1c7384a9c0ccbc45b3f512bae9e9f75c2e12109806a15331dc94e8a8db6dbb4ac
-  languageName: node
-  linkType: hard
-
-"@types/trusted-types@npm:^2.0.2":
-  version: 2.0.7
-  resolution: "@types/trusted-types@npm:2.0.7"
-  checksum: 10c0/4c4855f10de7c6c135e0d32ce462419d8abbbc33713b31d294596c0cc34ae1fa6112a2f9da729c8f7a20707782b0d69da3b1f8df6645b0366d08825ca1522e0c
   languageName: node
   linkType: hard
 
@@ -3064,23 +3056,6 @@ __metadata:
   version: 1.2.5
   resolution: "word-wrap@npm:1.2.5"
   checksum: 10c0/e0e4a1ca27599c92a6ca4c32260e8a92e8a44f4ef6ef93f803f8ed823f486e0889fc0b93be4db59c8d51b3064951d25e43d434e95dc8c960cc3a63d65d00ba20
-  languageName: node
-  linkType: hard
-
-"workbox-core@npm:7.1.0":
-  version: 7.1.0
-  resolution: "workbox-core@npm:7.1.0"
-  checksum: 10c0/fb0b6e23a52e085da00b7a74b1f1854f06c695eb2bd4c244aa335165f59156a4febb4f116b9893b9fb7e0e8bac092d32eecceb4d00f930a93f64737cb2be9531
-  languageName: node
-  linkType: hard
-
-"workbox-window@npm:^7.1.0":
-  version: 7.1.0
-  resolution: "workbox-window@npm:7.1.0"
-  dependencies:
-    "@types/trusted-types": "npm:^2.0.2"
-    workbox-core: "npm:7.1.0"
-  checksum: 10c0/c989a6e3a0488f049eead3892f8249387604fb04898aa79d0cf14cd7b684f0758f1edf1996745f4755bd30c31c449f628803e507d39b2ea91cc9c36f7d5e9c72
   languageName: node
   linkType: hard
 

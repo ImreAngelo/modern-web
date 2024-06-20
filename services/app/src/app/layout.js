@@ -1,4 +1,5 @@
 import { Inter } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -43,6 +44,12 @@ export default function RootLayout({ children }) {
 				<meta name="twitter:image:alt" content="Default image" />
             </>
 			<body className={inter.className}>{children}</body>
+            <Script 
+				id="loadSW"
+				dangerouslySetInnerHTML={{
+					__html:`if('serviceWorker' in navigator) navigator.serviceWorker.register('/worker.js').catch(console.error);`
+				}}
+			/>
 		</html>
 	);
 }
